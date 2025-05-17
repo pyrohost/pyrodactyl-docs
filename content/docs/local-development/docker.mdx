@@ -4,7 +4,8 @@ description: Setup a local development environment using Docker
 ---
 
 <Callout type="error">
-  This method only works on **macOS or Linux**. Windows is not supported.
+  This method isn't officially supported on Windows. While it may work, expect
+  potential issues.
 </Callout>
 
 This approach offers several advantages compared to [Vagrant](vagrant):
@@ -22,14 +23,13 @@ This approach offers several advantages compared to [Vagrant](vagrant):
 - Docker Engine
   - On Linux, see your distro's wiki or [Docker's docs](https://docs.docker.com/engine/install/) for setting up Docker alongside its services
   - On macOS, [OrbStack](https://orbstack.dev/) is recommended to provide Docker Engine, but [Docker Desktop](https://www.docker.com/products/docker-desktop/) can be used instead
-  - If using Docker Desktop on macOS, install [`docker-mac-net-connect`](https://github.com/chipmk/docker-mac-net-connect)
 - `buildx` and `compose` Docker extensions
   - These are installed by default with OrbStack and Docker Desktop
 
 ## Limitations
 
-- Rootless Docker (Linux) is not supported
 - To delete or modify server data on Linux, you'll need to use `sudo` as Docker creates the volume binds as root
+  - You can use rootless Docker to workaround this
 - If you move the repositories location, you'll need to [reset the server data](#resetting-server-data) as paths are hardcoded in the container
 
 ## Initial setup
@@ -72,7 +72,7 @@ Once you've completed the initial setup:
 
    - For a production preview, run `pnpm run ship` and its build will be hosted by Docker
 
-1. Access Pyrodactyl from http://localhost:3000/, and login using the default credentials of `dev@pyro.host` and `password`
+1. Access Pyrodactyl from http://localhost/, and login using the default credentials of `dev@pyro.host` and `password`
 
 1. Once finished, you can stop Docker using `pnpm compose:down`
 
@@ -84,7 +84,7 @@ Set up Remote Caching via Turbo for faster builds. Cached results allow producti
 
 ### Database host
 
-This method supports creating a database host out of the box, which allows you to create databases on servers for testing. To do this, navigate to http://localhost:3000/admin/databases, click **Create New**, and use the following settings:
+This method supports creating a database host out of the box, which allows you to create databases on servers for testing. To do this, navigate to http://localhost/admin/databases, click **Create New**, and use the following settings:
 
 {/* prettier-ignore */}
 ```yaml
@@ -104,9 +104,9 @@ To **irreversibly** reset your Docker data:
 
 1. Enter the following command in your terminal (`sudo` is only required on Linux):
 
-    ```bash
-    sudo rm -rf var vendor .env srv
-    ```
+   ```bash
+   sudo rm -rf var vendor .env srv
+   ```
 
 1. Put the Docker compose back up again (`pnpm compose`) and server data should be recreated
 
@@ -133,7 +133,7 @@ If you need to ask for help, ask in our [Pyrodactyl Discord server](https://disc
 
 ### Ports in use
 
-Try killing any processes that could be using Pyrodactyl's ports, i.e. 8080, 2022, and 3000 by default, then run `pnpm compose` again. However, if that won't work, try the below:
+Try killing any processes that could be using Pyrodactyl's ports, i.e. 8080, 2022, and 80 by default, then run `pnpm compose` again. However, if that won't work, try the below:
 
 1. If the issue is while starting a server, adjust the allocations in your node settings to other ports
 1. If the issue is while starting the compose, carefully adjust the `docker-compose.yml`'s IP settings
