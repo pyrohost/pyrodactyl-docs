@@ -128,7 +128,6 @@ const Page = () => {
 
 					<div className="relative chart w-full flex flex-col gap-4">
 						<div className="absolute right-0 top-8 bottom-8 w-0.5 bg-[#ffffff44]" />
-						<div className="absolute -right-4 bottom-0 text-xs opacity-50">45 sec</div>
 						<h1 className="mb-2 max-w-4xl font-extrabold text-[max(30px,min(5vw,42px))] leading-[1.09] tracking-tighter">Build times comparison</h1>
 						{buildTimes.map((item) => (
 							<div key={item.name} className="chart-row flex flex-row items-center gap-8 ">
