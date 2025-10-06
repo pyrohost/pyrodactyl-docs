@@ -3,4 +3,81 @@ title: Creating Locations
 description: Creating & Configuring locations
 ---
 
-text
+## What Is a Location?
+
+In Pyrodactyl a Location is a high–level grouping used to classify Nodes by geography, datacenter, or provider. It is purely organizational and does not itself run any workloads.
+
+## Location vs Node
+
+- Location: Logical label (no hardware, no allocations).
+- Node: Actual machine configuration (daemon, allocations, resource limits) that is assigned to exactly one Location.
+
+## Creating a Location
+
+1. Go to Admin Area > Locations.
+2. Click Create Location.
+3. Provide:
+    - Short Code: Concise identifier (e.g. us-nyc-1).
+    - Description (optional but recommended).
+4. Save.
+
+Short Codes should be:
+- Lowercase
+- Hyphen separated
+- Stable (avoid later renames if referenced externally)
+
+Examples: us-east, us-east-2, eu-fra, ap-sgp, edge-la, aws-usw-1, us.chicago.pyro 
+
+## Assigning Nodes
+
+When adding or editing a Node select the desired Location. Reassigning a Node later does not affect servers functionally; it only updates grouping.
+
+## Editing & Renaming
+
+- You may edit description anytime.
+- Renaming the short code is safe internally but may break external automation that relies on the old code—audit before changing.
+
+## Deleting a Location
+
+- You must first move or remove all Nodes under it.
+- Deletion leaves servers intact (they live under their Nodes) but you cannot delete if any Node still references the Location.
+
+## Best Practices
+
+- Keep list small and meaningful (regions/providers, not every rack).
+- Use consistent pattern (region-city-number or provider-region).
+- Avoid embedding transient info (like temporary offers or hardware specs).
+- Document naming scheme for staff.
+
+## Common Mistakes
+
+| Mistake | Impact | Fix |
+|---------|--------|-----|
+| Too many granular Locations | Cluttered UI | Merge into broader regions |
+| Using Location to reflect hardware tier | Confusion | Use Node naming / descriptions instead |
+| Renaming without notice | Automation breakage | Maintain a mapping or avoid rename |
+
+## API Notes
+
+Locations are retrievable and manageable via the administrative API. Create Locations first, then post Nodes referencing the Location ID or short code (depending on endpoint requirements).
+
+## When to Add Another Location
+
+Add a new Location only if:
+- New geographic region introduced
+- New provider with distinct compliance / cost profile
+- You need a clear segregation boundary for reporting
+
+If it is just a new machine in an existing region/provider, add another Node—not a Location.
+
+## Quick Checklist
+
+- Does it represent a distinct region or provider? (Yes -> Location)
+- Will staff readily understand the code? (Yes -> Good)
+- Will it stay relevant for 6+ months? (Yes -> Proceed).
+
+![Location Homepage](/img/locations-home.png)
+![Location Creation Fourm](/img/locations-creation.png)
+![Location About Page](/img/locations-about.png)
+
+After all of that you are done! Your location is made and now you can see it in the main locations page.
