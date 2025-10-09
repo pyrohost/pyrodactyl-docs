@@ -6,7 +6,7 @@ description: A comprehensive guide for setting up Pyrodactyl using Docker
 This comprehensive guide walks you through setting up Pyrodactyl using Docker, from scratch to a fully functional system.
 
 <Callout type="note">
-  The guide for migration has moved to a [new page](/docs/migrations).
+  The migration guide has moved to a [new dedicated page](/docs/migrations).
 </Callout>
 
 <Callout type="info">
@@ -100,6 +100,13 @@ In addition to the Pyrodactyl panel, you'll need Pterodactyl Wings as a backend 
      ```
 
 ## Post-Installation Steps
+
+<Callout type="info">
+  Enabling swap for Docker is optional but recommended if you're hosting for others or want to prevent Out of Memory (OOM) errors. 
+  First, check if swap is needed by running docker info and looking for the warning "WARNING: No swap limit support." If you need to enable swap, open `/etc/default/grub` as root, find the line starting with `GRUB_CMDLINE_LINUX_DEFAULT`, 
+  and ensure it includes swapaccount=1 (note: this line may have other OS-specific parameters, should look something like `GRUB_CMDLINE_LINUX_DEFAULT="swapaccount=1 net.ifnames=0"`). After making changes, run `sudo update-grub` with a swift `sudo reboot` after.
+</Callout>
+
 
 ### Email Configuration
 
