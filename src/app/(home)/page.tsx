@@ -78,7 +78,7 @@ const Page = () => {
 								<PyroButton variant="secondary" href="/docs" isArrow>
 									<BookOpenText size={16} /> View Documentation
 								</PyroButton>
-								<PyroButton variant="tertiary" href="https://github.com/pyrohost/pyrodactyl" isArrow external>
+								<PyroButton variant="secondary" href="https://github.com/pyrohost/pyrodactyl" isArrow external>
 									<GitHubLogoIcon /> Star on GitHub
 								</PyroButton>
 							</div>
