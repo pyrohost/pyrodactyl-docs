@@ -33,8 +33,8 @@ const button = cva(
 			variant: {
 				primary: ["bg-brand", "text-white", "hover:bg-brand/80"],
 				secondary: ["bg-black dark:bg-white", "text-white dark:text-black", "hover:bg-black/80 dark:hover:bg-white/80"],
-				tertiary: ["bg-[#ffffff33]", "text-white", "hover:bg-[#ffffff55]"],
-				quaternary: ["bg-transparent", "text-white", "hover:bg-black/80", "border-[#ffffff33]", "hover:border-[#ffffff55]"],
+				tertiary: ["bg-black/10 dark:bg-[#ffffff33]", "text-black dark:text-white", "hover:bg-black/20 dark:hover:bg-[#ffffff55]"],
+				quaternary: ["bg-transparent", "text-black dark:text-white", "hover:bg-black/10 dark:hover:bg-black/80", "border-black/20 dark:border-[#ffffff33]", "hover:border-black/30 dark:hover:border-[#ffffff55]"],
 			},
 			size: {
 				ghost: [],
