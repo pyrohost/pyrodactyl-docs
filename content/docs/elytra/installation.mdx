@@ -1,6 +1,284 @@
 ---
-title: Installation
-description: description
+title: Installing Elytra
+description: How to install and setup Elytra on Linux
 ---
 
-# Coming Soon
+
+## Supported Operating Systems
+
+<Callout type='info'>
+There is a very high chance it will work on more than these. These are the ones that are
+known working and officially supported though.
+</Callout>
+
+|OS|Version|
+|---|---|
+|Fedora| 40-42|
+|Ubuntu| 24.04|
+|Debian| 13|
+|Rocky | 10|
+|RHEL | 10|
+|Arch| 2025.10.1|
+
+## Prerequisites
+
+- curl
+- tar
+- docker
+- [rustic](https://github.com/rustic-rs/rustic/releases/latest)
+
+
+### Installing Prequisites
+
+<Tabs items={["Fedora", "Ubuntu", "Debian", "Rocky", "RHEL", "Arch"]}>
+<Tab value="Fedora">
+```bash
+sudo dnf update
+sudo dnf install curl tar
+sudo dnf -y install dnf-plugins-core
+sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+</Tab>
+<Tab value="Ubuntu">
+```bash
+sudo apt-get update
+sudo apt-get install curl tar ca-certificates
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+</Tab>
+<Tab value="Debian">
+```bash
+sudo apt-get update
+sudo apt-get install curl tar ca-certificates
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+</Tab>
+<Tab value="Rocky">
+```bash
+sudo dnf update
+sudo dnf install curl tar
+sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+</Tab>
+<Tab value="RHEL">
+```bash
+sudo yum update
+sudo yum install curl tar
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+</Tab>
+<Tab value="Arch">
+```bash
+sudo pacman -Syu
+sudo pacman -S curl tar docker
+```
+</Tab>
+</Tabs>
+
+Now, enable the docker engine service to start on boot
+```bash
+sudo systemctl enable --now docker
+```
+
+## Installing Elytra
+Now we need to install elytra. This will be the program communicating with your Pyrodactyl Panel.
+
+### Download Executable
+
+<Tabs items={["amd64", "arm64"]}>
+<Tab value="amd64">
+  ```bash
+    curl -o /usr/local/bin/elytra https://github.com/pyrohost/elytra/releases/download/latest/elytra_linux_amd64 
+  ```
+</Tab>
+<Tab value="arm64">
+  ```bash
+    curl -o /usr/local/bin/elytra https://github.com/pyrohost/elytra/releases/download/latest/elytra_linux_arm64 
+  ```
+</Tab>
+</Tabs>
+
+
+### Installing Rustic
+<Callout type='error'>
+Rustic is not required to run Elytra. You do however lose out on Deduplicated and encrypted backups.
+The Pyrodactyl team heavily recommends you install it.
+</Callout>
+
+To install rustic, you have the choice of building from source, or downloading the latest pre-built binary.
+The quickest way is to use the pre-built binaries.
+
+<Tabs items={["amd64", "arm64"]}>
+<Tab value="amd64">
+```bash
+  mkdir -p /tmp/rustic-install
+	curl -L https://github.com/rustic-rs/rustic/releases/download/v0.10.0/rustic-v0.10.0-x86_64-unknown-linux-musl.tar.gz | sudo tar -zx -C /usr/local/bin
+  sudo mv /tmp/rustic-install/rustic /usr/local/bin/
+```
+</Tab>
+<Tab value="arm64">
+```bash
+  mkdir -p /tmp/rustic-install
+	curl -L https://github.com/rustic-rs/rustic/releases/download/v0.10.0/rustic-v0.10.0-aarch64-unknown-linux-musl.tar.gz | sudo tar -zx -C /usr/local/bin
+  sudo mv /tmp/rustic-install/rustic /usr/local/bin/
+```
+</Tab>
+</Tabs>
+
+
+
+### Setting up Systemd Task for Elytra
+
+```bash
+sudo nano /etc/systemd/system/elytra.service
+```
+and paste
+
+```systemd
+[Unit]
+Description=Pyrodactyl Elytra Daemon
+After=docker.service
+Requires=docker.service
+PartOf=docker.service
+
+[Service]
+User=root
+WorkingDirectory=/etc/elytra
+LimitNOFILE=4096
+PIDFile=/var/run/elytra/daemon.pid
+ExecStart=/usr/local/bin/elytra
+Restart=on-failure
+StartLimitInterval=180
+StartLimitBurst=30
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Now save and exit that file.
+
+
+## Setup Elytra
+To setup Elytra, you must first get your config. This is done by first, adding a new node in your Pyrodactyl Panel.
+
+### Setup your Elytra
+  First thing you need to do, is to get to your admin panel.  
+  This is located at `https://<Your-Domain.com>/admin`
+
+### Setting up Your Location
+
+  after visiting this page, you should see a menu on the left side of the screen called `Locations`
+  Click on that to make your first location
+
+
+![Location View](/img/SearchForLocations.png)
+
+
+Once on this page, click "Create New" in the top right corner
+Name it whatever you want. This name doesn't matter that much.
+
+### Create Your Node
+
+Once your Location is created. Click on Nodes right beneath the locations button.
+
+![Node View](/img/SearchForNodes.png)
+
+
+Click "Create New"
+
+and you will be prompted with a screen with lots of buttons and input fields.
+The only values you will need to change are 
+
+- Name  
+Give it a unique name that you can identify this node by
+
+- Public FQDN
+<Callout type="info">This address should be The address that people will use when connecting to your node.
+not panel to node</Callout>
+If your panel is https secured is has to be a domain name, and vise versa, if it's http, it has to be
+an ip address.
+
+- Total Memory  
+How much memory your Server has
+<Callout type='warn'> This is not a hard value. The panel will only get mad at you, not stop you!</Callout>
+
+- Memory Over-Allocation  
+How much percent over your Total Memory you want to show up as "Available"
+
+- Total Disk Space  
+How much disk space you have to use
+<Callout type='warn'> This is not a hard value. The panel will only get mad at you, not stop you!</Callout>
+
+- Disk Over-Allocation
+How much percent over your Total Disk you want to show up as "Available"  
+  <Callout type='warn'>
+    If your going to run Elytra behind a proxy Set Behind proxy to true
+  </Callout>
+
+
+Click Create on your node, and it might take a second. But then it should load into the nodes page.
+
+---
+
+### Configuring Elytra
+
+Click the `Configuration` Button located at the top of the page
+
+![Elytra Config](/img/ElytraConfig.png)
+
+
+Rather than anything complex, you can press the auto deploy button on the side of the page,
+and copy the command that pops out which should look a little something like this
+
+```bash
+cd /etc/elytra && sudo elytra configure --panel-url http://panel.pyrodactyl.dev --token pyro_XWsMcVoJkoMCWn9COtSsUTlbRSevBbLJ5HEMKZQjnN5 --node 1
+```
+
+
+### Test your service.
+
+If you want to run Elytra just to test it. You can do that by running this command anywhere on your host
+
+```bash
+  elytra
+```
+
+Once you've got your stuff working. your free to go
+
+---
+
+
+### Enable Elytra Service
+
+```bash
+  sudo systemctl enable --now elytra
+```
+
