@@ -38,6 +38,10 @@ This comprehensive guide walks you through setting up Pyrodactyl using Docker, f
 
 1. In terminal, cd into the directory, and run the following command to start the panel:
 
+<Callout type="note">
+   If you want to use Let's Encrypt for SSL, add the `LE_EMAIL` variable to the `x-common` section under the panel service in your `docker-compose.yml` file. After adding it, run `docker compose down`, delete the `/srv/pterodactyl/nginx` directory, and then run `docker compose up -d` to regenerate the SSL configuration.
+</Callout>
+
    ```bash
    docker compose up -d
    ```

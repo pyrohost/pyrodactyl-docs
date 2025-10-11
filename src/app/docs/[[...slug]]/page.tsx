@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { DocsPage, DocsBody, DocsTitle, DocsDescription } from 'fumadocs-ui/page';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
 import { Card, Cards } from 'fumadocs-ui/components/card';
 import defaultMdxComponents, { createRelativeLink } from 'fumadocs-ui/mdx';
 import { source } from '@/lib/source';
@@ -47,6 +48,7 @@ export default async function Page({ params }: PageParams) {
             a: createRelativeLink(source, page),
             Tabs,
             Tab,
+            Callout,
             Card,
             Cards
           }}
