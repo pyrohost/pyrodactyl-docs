@@ -3,7 +3,111 @@ title: Creating Servers
 description: How to create and mannge a server
 ---
 
-Creating servers is the fundamental park of using pyrodactyl
+Creating servers is the fundamental part of using Pyrodactyl.
+
+After setting up your nodes and seeing a green beating heart, you can continue with setting up servers.
+
+## What is a Server?
+
+A server in Pyrodactyl is a containerized application instance that runs on a Node. It consumes a defined amount of resources (CPU, memory, disk, network allocations) from its assigned Node.
+
+## Prerequisites
+
+-   At least one configured and online Node.
+-   Available allocations (IP:Port combinations) on the chosen Node.
+-   A valid Egg for the game or application you wish to run.
+
+## Creating a Server
+
+1.  **Navigate to the Admin Area:** From your Pyrodactyl panel, go to `Admin Area` > `Servers`.
+2.  **Click "Create New":** In the top right corner, click the "Create New" button.
+3.  **Fill out the Server Details:**
+
+    -   **Server Name:** A user-friendly name for your server (e.g., "My Minecraft Survival Server").
+    -   **Server Owner:** Select the user who will own and manage this server.
+    -   **Description (Optional):** A brief description of the server's purpose.
+    -   **Node:** Choose the Node where this server will be deployed. Ensure the Node has sufficient resources and allocations.
+    -   **Allocation:** Select an available IP:Port allocation from the chosen Node. This is how users will connect to your server.
+    -   **Egg:** Select the appropriate Egg for the game or application (e.g., "Minecraft: Java Edition").
+    -   **Nest:** The Nest associated with the chosen Egg will be automatically selected.
+
+4.  **Configure Resources:**
+
+    -   **Memory (MiB):** The maximum amount of RAM the server can use.
+    -   **Swap (MiB):** The amount of swap space available. Set to `-1` for unlimited.
+    -   **Disk Space (MiB):** The maximum amount of disk space the server can use.
+    -   **CPU Limit (%):** The percentage of a single CPU core the server can use (e.g., `100` for one thread, `200` for two cores).
+    -   **IO Weight:** Adjusts the I/O priority for the server (10-1000, default 500).
+
+5.  **Configure Startup Parameters:**
+
+    -   **Startup Command:** The command used to start the server. This is usually pre-filled by the Egg.
+    -   **Service Variables:** Additional variables defined by the Egg that can be configured (e.g., server JAR file, difficulty).
+
+6.  **Advanced Settings (Optional):**
+
+    -   **Database Limit:** Maximum number of databases the server owner can create.
+    -   **Allocation Limit:** Maximum number of additional allocations the server owner can create. (in the [network tab](/post-install/users/servers/network))
+    -   **Backup Limit:** Maximum number of backups the server owner can create.
+    -   **OOM Killer:** Enable or disable the Out-Of-Memory killer for this server.
+
+7.  **Click "Create Server":** Once all details are filled, click the button to create the server.
+
+The server will now be provisioned on the selected Node. You can monitor its status and manage it from the server list.
+
+## Managing Servers
+
+Once a server is created, the user that is assigned the server can perform various management tasks:
+<Callout type="note">
+    Admins can still manage and access servers, they will apear under "other servers" when on the homepage of the panel
+</Callout>
+
+-   **Start/Stop/Restart:** Control the server's power state.
+-   **Console:** View server logs and send commands.
+-   **Files:** Access and manage server files via SFTP or the web interface.
+-   **Databases:** Create and manage MySQL databases for the server.
+-   **Schedules:** Set up automated tasks (e.g., daily backups, restarts).
+-   **Network:** Manage additional IP allocations and port forwarding.
+-   **Subusers:** Grant other users access to manage specific aspects of the server.
+-   **Settings:** Modify server resource limits, startup parameters, and other configurations.
+-   **Backups:** Create, restore, and manage server backups.
+
+## Best Practices
+
+-   **Resource Allocation:** Allocate resources carefully. Over-allocating can lead to resource exhaustion on the Node, while under-allocating can cause server performance issues.
+-   **Security:** Regularly update server software and use strong passwords for SFTP and database access.
+-   **Backups:** Implement a regular backup strategy to prevent data loss.
+-   **Monitoring:** Keep an eye on server resource usage and logs to identify and resolve issues proactively.
+-   **Eggs:** Ensure you are using up-to-date and well-maintained Eggs for your applications.
+
+## Common Issues
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Server won't start | Insufficient resources on Node | Check Node capacity and reduce server limits or add resources |
+| Port binding errors | Allocation already in use or bind IP incorrect | Use `0.0.0.0` as bind address, verify port is free on Node |
+| Out of Memory crashes | Memory limit too low for application | Increase memory allocation or enable swap |
+| Server stuck in "Installing" | Egg installation script failed | Check server logs, verify Egg is up-to-date |
+| Cannot connect to server | Firewall blocking ports or wrong allocation | Verify Node firewall rules allow the server's port |
+| SFTP connection fails | Wrong SFTP port or Node unreachable | Verify Node's SFTP port (default 2022) is open and correct |
+| Slow file uploads | Upload size limit too restrictive | Increase Node's upload size limit in settings |
+| Database creation fails | Database limit reached | Increase database limit or remove unused databases |
+| Startup command errors | Invalid variables or missing files | Review Egg configuration and service variables |
+| Backup fails | Insufficient disk space or backup limit reached | Free up disk space or increase backup limit |
+
+### Troubleshooting Tips
+
+-   **Check Server Logs:** Most issues and their situations are in the server logs themselves. 
+-   **Verify Node Status:** Ensure the Node has a green heartbeat and correct resources.
+-   **Review Egg Configuration:** Ensure the Egg is compatible with the application version you're trying to use.
+-   **Resource Monitoring:** Use Node metrics to find resource bottlenecks (CPU, RAM, disk I/O).
+
+### When to Contact Support
+
+If you've verified all settings and the issue persists:
+-   Check the [Common Issues](/common-issues/bind-issues) section for detailed troubleshooting guides.
+-   Review [Pyrodactyl Discord](https://discord.com/invite/FGWKZT5dxv?utm_campaign=pyrodactyl_support) for similar issues.
+-   Gather server logs, Node status, and error messages before seeking help.
 
 ## Additional Resources
 
