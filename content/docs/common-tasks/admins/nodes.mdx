@@ -1,0 +1,186 @@
+---
+title: Creating Nodes
+description: Creating and configuring nodes
+---
+
+Don’t create a Node just to group servers--use naming/filters. If you must,
+use Locations for grouping (e.g., bedwars.provider).
+
+## When to Create a Node
+
+- When you have new hardware (VPS or Dedicated) to host more servers.
+- When you split one dedicated server into multiple virtual machines
+  (e.g., Proxmox or another hypervisor).
+
+## What is a Node?
+
+- A Node represents physical hardware running the Pyrodactyl Elytra
+  (or Pterodactyl Wings) daemon that hosts servers in containers.
+- Nodes define resource pools for CPU, Memory, Disk Space, IPs, and ports.
+
+## Node vs Location vs Server
+
+- Location: A grouping label (region/provider).
+- Node: Machine + daemon + resource/allocation pool; belongs to one Location.
+- Server: A user container consuming a slice of a Node’s resources and allocations.
+
+Tip: Don’t create a Node just to group servers--use naming/filters. If needed,
+use Locations for that.
+
+## Prerequisites
+
+- Domain name (optional, but required for SSL/TLS).
+- Daemon reachable (firewall open).
+- FQDN or IP ready (decide on SSL/reverse proxy).
+- SFTP/Docker dependencies installed as needed.
+
+## Terminology
+
+- Servers: The game servers you want to run (e.g., Minecraft, TF2).
+- VPS/Dedicated: The hardware hosting the game servers.
+- Nodes: Internal name to specify which hardware is used.
+- Location: The panel label to separate where nodes are physically hosted.
+
+## Creating a Node
+
+1. Admin Area > Nodes > Create Node.
+2. Fill out the fields and save.
+3. Add at least one IP/Port allocation.
+4. Assign or create servers for this Node.
+
+## Core Fields
+
+- General: Name, Description, Location.
+- Connectivity: FQDN/IP, Public Port (daemon, e.g., 8080), SFTP Port (e.g., 2022);
+  open firewall rules.
+- Resource Limits (totals for the Node): Total Memory, Disk, CPU; Over-Allocate %
+  for memory/disk/CPU.
+- Allocation/Ports: Default IP, additional IPs, add port ranges, remove unused ports.
+- Daemon Config: Base Path (e.g., /var/lib/pyrodactyl/servers), Behind Proxy,
+  Maintenance Mode, Backup directory/limits.
+- Security/Limits: Upload size, allowed archive extensions, default Docker images list,
+  reject stale daemon versions.
+- Advanced: Task timeout/graceful stop, container network mode, disk check strategy.
+
+## Editing a Node
+
+- Safe changes: Description, over-allocation values, add IPs/ports, Docker image list,
+  upload limits, Maintenance toggle.
+- Use caution: FQDN/IP, Public/SFTP ports (requires DNS/firewall updates and service restart),
+  Base Path (requires data migration).
+
+## Renaming
+
+- No runtime impact; may break external automation. Audit scripts first.
+
+## Resource Strategy
+
+- Memory/Disk: Reflect usable capacity minus OS; use modest over-allocation.
+- CPU: Sum of server CPU limits should respect Total CPU plus over-allocate margin.
+  Over-allocate lightly for bursty workloads (25–50%); avoid for consistently high usage.
+
+## Allocation Management
+
+- Workflow: Add IPs → add port ranges → servers consume ports → remove unused.
+- Best practices:
+  - Keep a 10–15% port buffer.
+  - Group port ranges by game type.
+  - Add aliases for multi-provider/NAT setups.
+
+## Deleting a Node
+
+- Move or delete all servers first, then clear allocations, then delete the Node.
+  There is no automatic migration.
+
+## Migration (High-Level)
+
+1. Create the new Node and ensure parity (images, versions, ports).
+2. Stop the server.
+3. Transfer files (rsync/backup/restore).
+4. Recreate on the new Node.
+5. Validate.
+6. Clean old allocations.
+
+## Monitoring & Health
+
+- Watch daemon heartbeat.
+- Track free allocations and over-allocation pressure (avoid >90% of physical).
+- Monitor disk usage and inodes.
+- Keep Docker images updated.
+
+## Common Mistakes (and fixes)
+
+- Setting Total Memory to full RAM → OOM risk → reserve 5–15% for the OS.
+- Excessive over-allocation (e.g., 200%) → performance issues → lower the ratio.
+- Missing firewall rules for daemon/SFTP → offline/errors → open and persist rules.
+- Mixing prod/test on the same Node → contention → separate or limit.
+- Deleting an IP before clearing allocations → stale errors → remove allocations first.
+- Skipping Maintenance before major changes → disruptions → enable Maintenance.
+- Changing Base Path carelessly → broken paths → plan migration/symlinks.
+
+## Best Practices
+
+- Use consistent naming (e.g., node-us-nyc-1); put hardware class in description.
+- Maintain a capacity sheet (total vs. allocated).
+- Prune unused ports; curate a minimal set of Docker images.
+- Use Maintenance Mode for daemon/kernel upgrades.
+
+## API Notes
+
+- Admin API: create/list Nodes, manage allocations, update limits, toggle maintenance.
+- Typical flow: POST Location → POST Node → POST allocations → POST servers (Node ID).
+  Validate daemon connection.
+
+## When to Add Another Node
+
+- Add when you have a new machine, sustained capacity >80% memory, isolation needs,
+  or different performance tiers.
+- Don’t add a Node just for a single new server or a different Docker image.
+
+## Quick Checklist
+
+- Daemon reachable; DNS/SSL/proxy correct; firewall open (daemon/SFTP).
+- Resource totals set minus OS; intentional over-allocation.
+- IPs added with an adequate port pool.
+- Docker images curated; monitoring/logs configured; backup strategy in place.
+
+## Capacity Review Tips
+
+- Memory: alert at 75%, plan at 85%.
+- Disk: alert at 70%, plan at 80%, emergency at 90%.
+- Ports: alert when &lt;10% free.
+- CPU: check sustained 15m load vs. core count.
+
+## Troubleshooting
+
+- Node offline: check daemon service, TLS/proxy, and connectivity (nc/curl).
+- Can’t allocate ports: pool exhausted, IP missing, or port in use/firewalled.
+- Start fails (insufficient resources): over-allocation exceeded → adjust or migrate.
+
+## Glossary
+
+- Allocation: Reserved IP:Port.
+- Over-Allocate: Oversubscribe beyond physical resources.
+- Daemon: Background container manager.
+- Maintenance Mode: Blocks new actions; running servers continue.
+
+## Example Naming
+
+- node-us-east-1, node-eu-fra-2, node-ap-sgp-1, node-edge-la-1, node-aws-usw-1, us.chicago.pyro
+
+## Scaling
+
+- Vertical: increase Node resources (after hardware upgrade).
+- Horizontal: add another Node in the same Location.
+- Geographic: create a new Location and add a Node there.
+
+## Visual References
+
+- Nodes homepage, Create Node form, Node detail overview.
+
+## Additional Resources
+
+- [Docker Documentation](https://docs.docker.com/)
+- [Pyrodactyl GitHub](https://github.com/pyrohost/pyrodactyl)
+- [Pterodactyl Documentation](https://pterodactyl.io/)
+- [Pyrodactyl Discord](https://discord.com/invite/FGWKZT5dxv?utm_campaign=pyrodactyl_support)
