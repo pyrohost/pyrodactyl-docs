@@ -1,6 +1,6 @@
 {
   "title": "Pyrodactyl",
-  "description": "Pyrodactyl docs",
+  "description": "Docs for the Pyrodactyl game server panel",
   "icon": "pyrodactyl",
   "pages": [
     "index",
