@@ -1,8 +1,9 @@
 import { docs } from '@/.source';
 import { loader } from 'fumadocs-core/source';
 import { createElement } from 'react';
-import { icons } from 'lucide-react';
+import { icons, Info } from 'lucide-react';
 import PyrodactylLogo from '@/components/ui/PyrodactylLogo';
+import ElytraLogo from '@/components/ui/ElytraLogo';
 
 // `loader()` also assign a URL to your pages
 // See https://fumadocs.vercel.app/docs/headless/source-api for more info
@@ -14,7 +15,13 @@ export const source = loader({
       return
     }
     if (icon == "pyrodactyl") {
-      return PyrodactylLogo();
+      return createElement(PyrodactylLogo);
+    }
+    if (icon == "elytra") {
+      return createElement(ElytraLogo);
+    }
+    if (icon == "info") {
+      return createElement(Info);
     }
 
     if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
