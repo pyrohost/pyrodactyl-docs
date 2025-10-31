@@ -1,8 +1,21 @@
 {
   "title": "Pyrodactyl",
-  "description": "Pyrodactyl docs",
+  "description": "Docs for the Pyrodactyl game server panel",
   "icon": "pyrodactyl",
-  "pages": ["index", "changelog", "..."],
+  "pages": [
+    "index",
+    "changelog",
+    "automated",
+    "installation",
+    "config",
+    "local-development",
+    "migrations",
+    "subdomains",
+    "common-issues",
+    "---",
+    "Common Tasks",
+    "../common-tasks"
+  ],
   "root": true,
   "defaultOpen": true
 }

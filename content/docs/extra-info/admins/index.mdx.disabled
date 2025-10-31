@@ -1,0 +1,29 @@
+---
+title: Overview - Admin
+description: Admin Users Tasks & Abilities
+---
+
+<Cards>
+  <Card title="Adding Users" href="/docs/post-install/users">
+    Add user accounts with & without admin permissions
+  </Card>
+  <Card title="Creating Locations" href="/docs/post-install/locations">
+    Add locations to keep nodes orginzed
+  </Card>
+  <Card title="Creating Nodes" href="/docs/post-install/nodes">
+    Add nodes to where servers are located
+  </Card>
+  <Card title="Creating Servers" href="/docs/post-install/servers">
+    Creating serers & assigning them to a node
+  </Card>
+  <Card title="Server Allocations" herf="docs/post-install/allocations">
+    Creating ports & allocating them to servers
+  </Card>
+</Cards>
+
+## Additional Resources
+
+- [Docker Documentation](https://docs.docker.com/)
+- [Pyrodactyl GitHub](https://github.com/pyrohost/pyrodactyl)
+- [Pterodactyl Documentation](https://pterodactyl.io/)
+- [Pyrodactyl Discord](https://discord.com/invite/FGWKZT5dxv?utm_campaign=pyrodactyl_support)

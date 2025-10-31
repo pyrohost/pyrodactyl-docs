@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { DocsPage, DocsBody, DocsTitle, DocsDescription } from 'fumadocs-ui/page';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
@@ -14,6 +14,12 @@ interface PageParams {
 
 export default async function Page({ params }: PageParams) {
   const { slug } = await params;
+  
+  // Redirect /docs to /docs/pyrodactyl
+  if (!slug || slug.length === 0) {
+    redirect('/docs/pyrodactyl');
+  }
+  
   const page = await source.getPage(slug);
 
   if (!page) {
@@ -57,7 +63,10 @@ export default async function Page({ params }: PageParams) {
 }
 
 export async function generateStaticParams() {
-  return source.generateParams();
+  return [
+    { slug: [] }, // Include the /docs root path for static export
+    ...source.generateParams()
+  ];
 }
 
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
