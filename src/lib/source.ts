@@ -6,7 +6,6 @@ import PyrodactylLogo from '@/components/ui/PyrodactylLogo';
 import BlueprintLogo from '@/components/ui/BlueprintLogo';
 import ElytraLogo from '@/components/ui/ElytraLogo';
 import { Bird } from "lucide-react"
-import ElytraIcon from '@/components/ui/ElytraIcon';
 
 // `loader()` also assign a URL to your pages
 // See https://fumadocs.vercel.app/docs/headless/source-api for more info
