@@ -1,0 +1,31 @@
+---
+title: Blueprint Documentation
+description: A fork of Blueprint Framework that works for Pyrodactyl
+---
+
+<Callout type="warning">
+This fork is not maintained by Pyro Inc. Although there is `#blueprint-support` channel, please direction any questions, issues, or problems to @flyingcopper within the channel as I am the main maintainer of the project and to not interfere with Pyro maintainers.
+</Callout>
+
+## Dependencies
+<Tabs items={["Ubuntu"]}>
+    <Tab value="Ubuntu">
+        ```bash
+        # Install dependencies
+        sudo apt install -y ca-certificates curl git gnupg unzip wget zip
+
+        # Add Node.js apt repository
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+        sudo apt update
+        sudo apt install -y nodejs
+
+        # Install yarn
+        npm i -g yarn
+        yarn install
+        ```
+    </Tab>
+</Tabs>
+
+Now follow the instructions for your installation method.
