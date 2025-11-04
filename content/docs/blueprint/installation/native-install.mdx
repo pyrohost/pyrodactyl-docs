@@ -1,0 +1,60 @@
+---
+title: Native Install
+description: Learn how to get started with Blueprint on Bare Metal
+---
+
+After making sure to install the dependencies, you can now follow the next steps!
+
+<Callout type='info'>
+It is highly recommended that you use the offical Blueprint page to configure your environment variables.
+Additionally, most of the instructions on this page are based on the offical Blueprint page which typically means that the offical page is more up to date.
+Those instructions can all be found [here](https://blueprint.zip/guides/admin/install).
+</Callout>
+
+## Step 1 - Define Pyrodactyl Directory
+First you need to set an environment variable for the blueprint script to use.
+```bash
+# Use this command to set a $PYRODACTYL_DIRECTORY variable
+# for use later in this guide.
+export PYRODACTYL_DIRECTORY=/var/www/pyrodactyl
+```
+
+## Step 2 - Download & Install Blueprint
+```bash
+# Navigate to your Pyrodactyl directory
+cd $PYRODACTYL_DIRECTORY
+
+# Download and unzip Blueprint's latest release
+wget "$(curl -s https://api.github.com/repos/pyrodactyl-oss/blueprint-framework/releases/latest | grep 'browser_download_url' | cut -d '"' -f 4)" -O $PYRODACTYL_DIRECTORY/release.zip
+unzip -o release.zip
+```
+
+## Step 3 - Configure Blueprint
+```bash
+# Creates a .blueprintrc file in your Pyrodactyl directory
+touch $PYRODACTYL_DIRECTORY/.blueprintrc
+```
+Now modify `$WEBUSER`, `$OWNERSHIP` and `$USERSHELL` to match the values of your environment. Here is the example from the offical Blueprint page.
+```bash
+# Writes data to your .blueprintrc file
+echo \
+'WEBUSER="www-data";
+OWNERSHIP="www-data:www-data";
+USERSHELL="/bin/bash";' > $PYRODACTYL_DIRECTORY/.blueprintrc
+```
+
+<Callout type='info'>
+If you are confused about the values of these variables, please refer to the [official Blueprint page](https://blueprint.zip/guides/admin/install#configure-blueprint) for more information.
+</Callout>
+
+## Step 4 - Run Blueprint
+All thats left now is to run `blueprint.sh` to finalize the installation.
+```bash
+# Give blueprint.sh execute permissions
+chmod +x $PYRODACTYL_DIRECTORY/blueprint.sh
+
+# Run blueprint.sh
+bash $PYRODACTYL_DIRECTORY/blueprint.sh
+```
+
+Now you should be able to enjoy Blueprint and download plugins to your heart's desire!
