@@ -26,6 +26,7 @@ known working and officially supported though.
 - tar
 - docker
 - [rustic](https://github.com/rustic-rs/rustic/releases/latest)
+- [certbot](https://github.com/certbot/certbot) (Optional if using SSL)
 
 
 ### Installing Prequisites
@@ -148,6 +149,71 @@ The quickest way is to use the pre-built binaries.
   mkdir -p /tmp/rustic-install
 	curl -L https://github.com/rustic-rs/rustic/releases/download/v0.10.0/rustic-v0.10.0-aarch64-unknown-linux-musl.tar.gz | sudo tar -zx -C /usr/local/bin
   sudo mv /tmp/rustic-install/rustic /usr/local/bin/
+```
+</Tab>
+</Tabs>
+
+### Creating SSL Certificates
+<Callout type='error'>
+Using SSL is not required to run Elytra, but if you checked ``Use SSL Connection`` when adding the node to your panel, you will need to do this step to enable SSL.
+It is recommended that you do this step to ensure connection security between the panel and the node.
+</Callout>
+
+Before continuing to create an SSL certificate, ensure that you have created an A Record for the FDQN you wish to use for the node, pointed to the IP of the machine on which the node will be running.
+
+<Tabs items={["Fedora", "Ubuntu", "Debian", "Rocky", "RHEL", "Arch"]}>
+<Tab value="Fedora">
+```bash
+sudo dnf update -y
+sudo dnf install certbot -y
+
+# Obtain a certificate (Replace 'node.pyrodactyl.dev' with your own FDQN)
+sudo certbot certonly --standalone -d node.pyrodactyl.dev
+```
+</Tab>
+<Tab value="Ubuntu">
+```bash
+sudo apt update
+sudo apt install certbot -y
+
+# Obtain a certificate (Replace 'node.pyrodactyl.dev' with your own FDQN)
+sudo certbot certonly --standalone -d node.pyrodactyl.dev
+```
+</Tab>
+<Tab value="Debian">
+```bash
+sudo apt update
+sudo apt install certbot -y
+
+# Obtain a certificate (Replace 'node.pyrodactyl.dev' with your own FDQN)
+sudo certbot certonly --standalone -d node.pyrodactyl.dev
+```
+</Tab>
+<Tab value="Rocky">
+```bash
+sudo dnf install epel-release -y
+sudo dnf install certbot -y
+
+# Obtain a certificate (Replace 'node.pyrodactyl.dev' with your own FDQN)
+sudo certbot certonly --standalone -d node.pyrodactyl.dev
+```
+</Tab>
+<Tab value="RHEL">
+```bash
+sudo dnf install epel-release -y
+sudo dnf install certbot -y
+
+# Obtain a certificate (Replace 'node.pyrodactyl.dev' with your own FDQN)
+sudo certbot certonly --standalone -d node.pyrodactyl.dev
+```
+</Tab>
+<Tab value="Arch">
+```bash
+sudo pacman -Syu
+sudo pacman -S certbot
+
+# Obtain a certificate (Replace 'node.pyrodactyl.dev' with your own FDQN)
+sudo certbot certonly --standalone -d node.pyrodactyl.dev
 ```
 </Tab>
 </Tabs>
