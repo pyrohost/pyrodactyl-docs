@@ -1,0 +1,91 @@
+---
+title: Fresh Installation
+description: Setup Blueprint using Docker from scratch to a fully functional system.
+---
+
+<p align="center">
+    <img src="https://private-user-images.githubusercontent.com/103201875/324199296-f1c39e6e-afb0-4e24-abd3-508ec883d66b.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjIzMDkxMTUsIm5iZiI6MTc2MjMwODgxNSwicGF0aCI6Ii8xMDMyMDE4NzUvMzI0MTk5Mjk2LWYxYzM5ZTZlLWFmYjAtNGUyNC1hYmQzLTUwOGVjODgzZDY2Yi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMTA1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTEwNVQwMjEzMzVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mNjJlNDIyNWU0OWRmN2JlZjY0MzMyYzhmZGE1NDNkYTRkYjk2MzdiZTUxYmYzMGJjOTM1ZTVjYWJkZjYyYTAzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.y2Wznu4eYduWX5AUphlca3qWy55HdrTWW7vLf7p5DK4" alt="Banner with Blueprint Logo" />
+</p>
+
+<Callout type='info'>
+<strong className='text-lg text-white font-bold !my-0'>Too lazy to read the whole guide?</strong><br/>
+You can jump down to the [TLDR](#tldr) section if you want to get started right away.
+</Callout>
+
+## Getting Started
+First, create a folder (ex. `pyrodactyl-panel-blueprint`) on your server in a safe location. This folder will be used to store all the files for Pyrodactyl and Blueprint.
+
+### Choosing Docker Compose File
+Next, you will have to decide the docker-compose file you would like to use. You have two options:
+* [`classic-docker-compose.yml`](https://github.com/pyrodactyl-oss/blueprint-docker/blob/main/classic-docker-compose.yml) - This stays as close to the original pterodactyl docker-compose file as possible.
+* [`docker-compose.yml (recommended)`](https://github.com/pyrodactyl-oss/blueprint-docker/blob/main/docker-compose.yml) - This is a more improved version of the docker-compose file. It is recommended that you choose this file if you are not sure.
+
+Once you decide on the docker-compose file, you will have to download it to your server to the folder you created in the previous step.
+
+<Callout type='info'>
+The installation guide will be using the recommended docker-compose file. The process is the same for both files.
+</Callout>
+
+### Configuring Docker Compose File
+As this guide will follow the recommended docker-compose file, you will have to also download the [`.env`](https://github.com/pyrodactyl-oss/blueprint-docker/blob/main/.env) file.
+
+<Callout type='warning'>
+If you are using the `classic-docker-compose.yml`, there is no need to install this file.
+</Callout>
+
+The file should look like this:
+```properties
+BASE_DIR=/srv/pyrodactyl
+# By default, you'd want to place your Wings config.yml file at /srv/pyrodactyl/wings/config.yml
+# In general, such as with this and with certs, you'd want to look at your mounts in the docker-compose.yml file
+# in order to know where to put things on the host system.
+APP_NAME=
+APP_ENV=production # "production" or "testing"
+PANEL_PORT=443
+# If you want to allow port 80 as well, i.e. if you don't use Cloudflare to manage your DNS and
+# automatically direct requests to https, you can add another port in the docker-compose.yml file
+WINGS_PORT=8080
+WINGS_SFTP_PORT=2022
+# Domain for mail sections (if you're configuring email)
+DOMAIN=example.com
+# Recommended strength is a random 20 digit password with letters, numbers, and symbols
+# You can use "openssl rand -base64 32" to generate a random password
+MARIADB_ROOT_PASS=
+MARIADB_USER_PASS=
+VALKEY_PASS=
+HASH_SALT=
+...
+```
+
+You can make your adjustments now to the `.env` file.
+
+### Start Docker Containers
+Once you have configured the docker-compose file, you can start the containers by running the following command:
+```bash
+docker compose up -d
+```
+
+### Creating Panel User
+Now that the panel is running, its time to make your first panel user. This user will be the admin user for the panel.
+```bash
+docker compose exec panel php artisan p:user:make
+```
+
+Now, you can check that the panel is accessible using the IP address or domain of your server.
+
+## TLDR
+```bash
+mkdir pyrodactyl-panel-blueprint
+cd pyrodactyl-panel-blueprint
+
+wget https://raw.githubusercontent.com/pyrodactyl-oss/blueprint-docker/main/docker-compose.yml
+wget https://raw.githubusercontent.com/pyrodactyl-oss/blueprint-docker/main/.env
+
+# Edit the .env file to your liking
+nano .env
+
+docker compose up -d
+docker compose exec panel php artisan p:user:make
+```
+
+Now navigate to the IP or domain of your panel.
