@@ -5,10 +5,16 @@ description: Guide for migrating from native Pterodactyl installation to native 
 
 ## Migrating from Pterodactyl (Native → Native)
 
-<Callout type="warn">
-  Before making any changes, back up your entire panel directory and database.
-  Pyrodactyl modifies the database schema, and rolling back to Pterodactyl may
-  result in data loss or instability.
+<Callout type='error'>
+Once you switch to Pyrodactyl, switching back to Pterodactyl is not supported and may cause errors as Pyrodactyl modifies the Pterodactyl Database Schema. Provided below is how you can make a backup of your Panel Database if you need to switch back. It is also recommended that you make a backup of the Pterodactyl folder aswell if anything goes wrong during migration. (Replace ``panel`` with the database name you use)
+
+```
+# If using MySQL
+mysqldump -u root -p --opt panel > ./panel.sql
+
+# If using MariaDB
+mariadb-dump -u root -p --opt panel > ./panel.sql
+```
 </Callout>
 
 ### Prerequisites
