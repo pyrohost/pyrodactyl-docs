@@ -1,0 +1,19 @@
+---
+title: Docker Migration
+description: Guide for migrating from Pyrodactyl to Pyrodactyl (Blueprint) using Docker
+---
+
+## Migrating from Pyrodactyl (Docker)
+<Callout type='warning'>
+Always make sure you take a backup of your Pterodactyl database and other relevant data.
+</Callout>
+
+If you already have Pyrodactyl running in Docker, simply update your panel image in your `docker-compose.yml` file:
+```diff
+-image: ghcr.io/pyrohost/pyrodactyl:main
++image: ghcr.io/pyrodactyl-oss/blueprint:latest
+```
+
+<Callout type='error'>
+Switching back from Blueprint to Pyrodactyl is not supported. We do not provide any support for this and cant guarantee that it will work. If you care about your data, **make a backup** before switching.
+</Callout>
