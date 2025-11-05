@@ -5,6 +5,18 @@ description: Guide for migrating from native Pterodactyl installation to Pyrodac
 
 ## Migrating from Pterodactyl (Native → Docker)
 
+<Callout type='error'>
+Once you switch to Pyrodactyl, switching back to Pterodactyl is not supported and may cause errors as Pyrodactyl modifies the Pterodactyl Database Schema. Provided below is how you can make a backup of your Panel Database if you need to switch back. (Replace ``panel`` with the database name you use)
+
+```
+# If using MySQL
+mysqldump -u root -p --opt panel > ./panel.sql
+
+# If using MariaDB
+mariadb-dump -u root -p --opt panel > ./panel.sql
+```
+</Callout>
+
 ### Prerequisites
 
 - Linux system with root access
@@ -13,6 +25,18 @@ description: Guide for migrating from native Pterodactyl installation to Pyrodac
 - Consider [Portainer](https://docs.portainer.io/start/install) for easier Docker management
 - Avoid using Snap-based Docker installations on Ubuntu
 - Enable Docker auto-start on boot
+
+<Callout type='error'>
+Once you switch to Pyrodactyl, switching back to Pterodactyl is not supported and may cause errors. Provided below is how you can make a backup of your Panel Database if you need to switch back. (Replace ``panel`` with the database name you use)
+
+```
+# If using MySQL
+mysqldump -u root -p --opt panel > ./panel.sql
+
+# If using MariaDB
+mariadb-dump -u root -p --opt panel > ./panel.sql
+```
+</Callout>
 
 ### Pyrodactyl Installation
 
@@ -51,6 +75,7 @@ description: Guide for migrating from native Pterodactyl installation to Pyrodac
    ```
 
 1. If your database is running on the same machine as your panel, set it to listen on the IP `172.17.0.1`, and change the `DB_HOST` environment variable to `172.17.0.1`.
+
 1. Rename `docker-compose.example.yml` to `docker-compose.yml`
 1. Run the following command to start the panel:
    ```bash

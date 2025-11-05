@@ -5,13 +5,26 @@ description: Guide for migrating from Pyrodactyl to Pyrodactyl (Blueprint) using
 
 ## Migrating from Pyrodactyl (Docker)
 <Callout type='warning'>
-Always make sure you take a backup of your Pterodactyl database and other relevant data.
+Always ensure that you make a backup of your Pyrodactyl database and any other relevant data. Provided below is how you can make a backup of your Panel Database. (Replace ``panel`` with the database name you use)
+
+```
+# If using MySQL
+mysqldump -u root -p --opt panel > ./panel.sql
+
+# If using MariaDB
+mariadb-dump -u root -p --opt panel > ./panel.sql
+```
 </Callout>
 
-If you already have Pyrodactyl running in Docker, simply update your panel image in your `docker-compose.yml` file:
+If you already have Pyrodactyl running in Docker, update your panel image and add these volumes to your `docker-compose.yml` file:
 ```diff
--image: ghcr.io/pyrohost/pyrodactyl:main
-+image: ghcr.io/pyrodactyl-oss/blueprint:latest
+panel:
+   -image: ghcr.io/pyrohost/pyrodactyl:main
+   +image: ghcr.io/pyrodactyl-oss/blueprint:latest
+
+volumes:
+    + - "/srv/pyrodactyl/extensions/:/blueprint_extensions"
+    + - "app:/app"
 ```
 
 <Callout type='error'>
