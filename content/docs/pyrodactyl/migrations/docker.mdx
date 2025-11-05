@@ -9,8 +9,16 @@ description: Guide for migrating from Pterodactyl to Pyrodactyl using Docker
 
 ## Migrating from Pterodactyl (Docker)
 
-<Callout type="warn">
-  Always make sure you take a backup of your Pterodactyl database and other relevant data.
+<Callout type='error'>
+Once you switch to Pyrodactyl, switching back to Pterodactyl is not supported and may cause errors as Pyrodactyl modifies the Pterodactyl Database Schema. Provided below is how you can make a backup of your Panel Database if you need to switch back. (Replace ``panel`` with the database name you use)
+
+```bash
+# If using MySQL
+mysqldump -u root -p --opt panel > ./panel.sql
+
+# If using MariaDB
+mariadb-dump -u root -p --opt panel > ./panel.sql
+```
 </Callout>
 
 If you already have Pterodactyl running in Docker, simply update your panel image in your `docker-compose.yml` file:
