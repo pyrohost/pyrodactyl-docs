@@ -8,7 +8,7 @@ description: Guide for migrating from native Pterodactyl installation to native 
 <Callout type='error'>
 Once you switch to Pyrodactyl, switching back to Pterodactyl is not supported and may cause errors as Pyrodactyl modifies the Pterodactyl Database Schema. Provided below is how you can make a backup of your Panel Database if you need to switch back. It is also recommended that you make a backup of the Pterodactyl folder aswell if anything goes wrong during migration. (Replace ``panel`` with the database name you use)
 
-```
+```bash
 # If using MySQL
 mysqldump -u root -p --opt panel > ./panel.sql
 
