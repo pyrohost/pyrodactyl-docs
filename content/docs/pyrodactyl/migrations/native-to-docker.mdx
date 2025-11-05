@@ -8,7 +8,7 @@ description: Guide for migrating from native Pterodactyl installation to Pyrodac
 <Callout type='error'>
 Once you switch to Pyrodactyl, switching back to Pterodactyl is not supported and may cause errors as Pyrodactyl modifies the Pterodactyl Database Schema. Provided below is how you can make a backup of your Panel Database if you need to switch back. (Replace ``panel`` with the database name you use)
 
-```
+```bash
 # If using MySQL
 mysqldump -u root -p --opt panel > ./panel.sql
 
@@ -25,18 +25,6 @@ mariadb-dump -u root -p --opt panel > ./panel.sql
 - Consider [Portainer](https://docs.portainer.io/start/install) for easier Docker management
 - Avoid using Snap-based Docker installations on Ubuntu
 - Enable Docker auto-start on boot
-
-<Callout type='error'>
-Once you switch to Pyrodactyl, switching back to Pterodactyl is not supported and may cause errors. Provided below is how you can make a backup of your Panel Database if you need to switch back. (Replace ``panel`` with the database name you use)
-
-```
-# If using MySQL
-mysqldump -u root -p --opt panel > ./panel.sql
-
-# If using MariaDB
-mariadb-dump -u root -p --opt panel > ./panel.sql
-```
-</Callout>
 
 ### Pyrodactyl Installation
 
